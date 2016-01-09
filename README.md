@@ -1,2 +1,2 @@
 # golog
-Easy and simple CLI time tracker for your tasks
+Easy CLI time tracker for your tasks.
