@@ -40,20 +40,9 @@ func (csvPath TaskCsv) load() Tasks {
 	tasks := Tasks{}
 	// sanity check, display to standard output
 	for _, line := range rawCsvData {
-		identifier := line[0]
-		action := line[1]
-		at := line[2]
-		fmt.Printf("identifier: %s action : %s at: %s\n", identifier, action, at)
-		task := Task{
-			Identifier: identifier,
-			Action:     action,
-			At:         at,
-		}
-		tasks.AddItem(task)
+		tasks.AddItem(Task{Identifier: line[0], Action: line[1], At: line[2]})
 	}
 	defer csvFile.Close()
-
-	fmt.Println(tasks)
 
 	return tasks
 }
