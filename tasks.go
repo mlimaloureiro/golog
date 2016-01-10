@@ -18,8 +18,16 @@ func (tasks *Tasks) addItem(item Task) []Task {
 	return tasks.Items
 }
 
-func (task Task) toArrayString() []string {
-	return []string{task.Identifier, task.Action, task.At}
+func (tasks Tasks) getByIdentifier(identifier string) Tasks {
+	tasksWithIdentifier := Tasks{}
+	for _, task := range tasks.Items {
+		if task.getIdentifier() != identifier {
+			continue
+		}
+		tasksWithIdentifier.addItem(task)
+	}
+
+	return tasksWithIdentifier
 }
 
 func (task Task) getIdentifier() string {
@@ -32,4 +40,8 @@ func (task Task) getAction() string {
 
 func (task Task) getAt() string {
 	return task.At
+}
+
+func (task Task) toArrayString() []string {
+	return []string{task.Identifier, task.Action, task.At}
 }
