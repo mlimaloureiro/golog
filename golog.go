@@ -22,11 +22,6 @@ var commands = []cli.Command{
 		Action: Pause,
 	},
 	{
-		Name:   "continue",
-		Usage:  "Continue tracking a given task",
-		Action: Continue,
-	},
-	{
 		Name:   "status",
 		Usage:  "Give status of all tasks",
 		Action: Status,
