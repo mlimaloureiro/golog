@@ -5,6 +5,31 @@ import "testing"
 const hourInSeconds = 3600
 const hourInMinutes = 60
 
+func TestTransform(t *testing.T) {
+	tasks := Tasks{
+		Items: []Task{
+			// 2 hours 2 mins and 5 seconds for identifier-1
+			{"identifier-1", "start", "2016-01-02T15:04:00Z"},
+			{"identifier-1", "stop", "2016-01-02T17:04:02Z"},
+			{"identifier-1", "start", "2016-12-29T19:04:00Z"},
+			{"identifier-1", "stop", "2016-12-29T19:06:02Z"},
+			// 1 hour for identifier-2
+			{"identifier-2", "start", "2016-01-02T15:04:00Z"},
+			{"identifier-2", "stop", "2016-01-02T16:04:00Z"},
+		},
+	}
+	transformer := Transformer{LoadedTasks: tasks}
+	transformedTasks := transformer.Transform()
+	expectedString1 := "identifier-1                               2h:2m:4s"
+	expectedString2 := "identifier-2                               1h:0m:0s"
+	if transformedTasks["identifier-1"] != expectedString1 {
+		t.Errorf("Expected %s, got %s.", expectedString1, transformedTasks["identifier-1"])
+	}
+	if transformedTasks["identifier-2"] != expectedString2 {
+		t.Errorf("Expected %s, got %s.", expectedString2, transformedTasks["identifier-2"])
+	}
+}
+
 func TestSecondsToHuman(t *testing.T) {
 	transformer := Transformer{}
 	secondsCase1 := 1432

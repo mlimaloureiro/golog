@@ -17,6 +17,23 @@ type Transformer struct {
 	LoadedTasks Tasks
 }
 
+// Transform Transforms all tasks to human readable
+func (transformer *Transformer) Transform() map[string]string {
+	transformedTasks := map[string]string{}
+	tasks := transformer.LoadedTasks.Items
+	for _, task := range tasks {
+		if _, inMap := transformedTasks[task.getIdentifier()]; inMap {
+			continue
+		}
+		taskSeconds := transformer.TrackingToSeconds(task.getIdentifier())
+		humanTime := transformer.SecondsToHuman(taskSeconds)
+		transformedTask := fmt.Sprintf("%s                               %s", task.getIdentifier(), humanTime)
+		transformedTasks[task.getIdentifier()] = transformedTask
+	}
+
+	return transformedTasks
+}
+
 // SecondsToHuman returns an human readable string from seconds
 func (transformer *Transformer) SecondsToHuman(totalSeconds int) string {
 	hours := math.Floor(float64(((totalSeconds % 31536000) % 86400) / 3600))
