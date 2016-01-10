@@ -1,4 +1,4 @@
-package golog
+package main
 
 import "testing"
 
@@ -20,8 +20,8 @@ func TestTransform(t *testing.T) {
 	}
 	transformer := Transformer{LoadedTasks: tasks}
 	transformedTasks := transformer.Transform()
-	expectedString1 := "2h:2m:4s  identifier-1"
-	expectedString2 := "1h:0m:0s  identifier-2"
+	expectedString1 := "2h:2m:4s    identifier-1 "
+	expectedString2 := "1h:0m:0s    identifier-2 "
 	if transformedTasks["identifier-1"] != expectedString1 {
 		t.Errorf("Expected %s, got %s.", expectedString1, transformedTasks["identifier-1"])
 	}
@@ -65,16 +65,19 @@ func TestTrackingToSeconds(t *testing.T) {
 		},
 	}
 	transformer := Transformer{LoadedTasks: tasks}
-	if transformer.TrackingToSeconds("identifier-1") != hourInSeconds*2+hourInMinutes*2+5 {
+	// @todo test status
+	seconds, _ := transformer.TrackingToSeconds("identifier-1")
+	if seconds != hourInSeconds*2+hourInMinutes*2+5 {
 		t.Errorf(
 			"Transformation for identifier-1 should be 7325 seconds, got %d.",
-			transformer.TrackingToSeconds("identifier-1"),
+			seconds,
 		)
 	}
-	if transformer.TrackingToSeconds("identifier-2") != hourInSeconds*1 {
+	seconds, _ = transformer.TrackingToSeconds("identifier-2")
+	if seconds != hourInSeconds*1 {
 		t.Errorf(
 			"Transformation for identifier-1 should be 3600 seconds, got %d.",
-			transformer.TrackingToSeconds("identifier-2"),
+			seconds,
 		)
 	}
 }

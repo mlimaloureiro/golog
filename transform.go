@@ -1,4 +1,4 @@
-package golog
+package main
 
 import (
 	"fmt"
@@ -25,9 +25,15 @@ func (transformer *Transformer) Transform() map[string]string {
 		if _, inMap := transformedTasks[task.getIdentifier()]; inMap {
 			continue
 		}
-		taskSeconds := transformer.TrackingToSeconds(task.getIdentifier())
+		taskSeconds, isActive := transformer.TrackingToSeconds(task.getIdentifier())
 		humanTime := transformer.SecondsToHuman(taskSeconds)
-		transformedTask := fmt.Sprintf("%s  %s", humanTime, task.getIdentifier())
+
+		status := ""
+		if isActive {
+			status = "(running)"
+		}
+
+		transformedTask := fmt.Sprintf("%s    %s %s", humanTime, task.getIdentifier(), status)
 		transformedTasks[task.getIdentifier()] = transformedTask
 	}
 
@@ -45,7 +51,7 @@ func (transformer *Transformer) SecondsToHuman(totalSeconds int) string {
 
 // TrackingToSeconds get entries from storage by identifier and calculate
 // time between each start/stop for a single identifier
-func (transformer *Transformer) TrackingToSeconds(identifier string) int {
+func (transformer *Transformer) TrackingToSeconds(identifier string) (int, bool) {
 	nextAction := "start"
 	var durationInSeconds float64
 	var startTime, stopTime time.Time
@@ -67,7 +73,7 @@ func (transformer *Transformer) TrackingToSeconds(identifier string) int {
 		durationInSeconds += time.Since(startTime).Seconds()
 	}
 
-	return int(durationInSeconds)
+	return int(durationInSeconds), isActive(nextAction)
 }
 
 // we can check if a task is active if we reach the end of the loop
