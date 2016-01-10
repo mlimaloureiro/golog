@@ -1,19 +1,21 @@
-package golog
+package main
 
 import (
 	"fmt"
 	"os"
 	"regexp"
+	"time"
 
 	"github.com/codegangsta/cli"
 )
 
 const alphanumericRegex = "^[a-zA-Z0-9_]*$"
 
+var repository = TaskCsvRepository{Path: "db.csv"}
 var commands = []cli.Command{
 	{
 		Name:   "start",
-		Usage:  "start tracking a given task",
+		Usage:  "Start tracking a given task",
 		Action: Start,
 	},
 	{
@@ -35,13 +37,17 @@ var commands = []cli.Command{
 
 // Start a given task
 func Start(context *cli.Context) {
-	if !IsValidIdentifier(context.Args().First()) {
+	identifier := context.Args().First()
+	if !IsValidIdentifier(identifier) {
 		cli.ShowCommandHelp(context, context.Command.FullName())
 	}
-	fmt.Println("starting", context.Args().First())
+
+	repository.save(Task{Identifier: identifier, Action: "start", At: time.Now().Format(time.RFC3339)})
+
+	fmt.Println("Started tracking ", identifier)
 }
 
-// Pause a given task
+// Stop a given task
 func Stop(context *cli.Context) {
 	if !IsValidIdentifier(context.Args().First()) {
 		cli.ShowCommandHelp(context, context.Command.FullName())
@@ -71,6 +77,5 @@ func main() {
 	app.Usage = "Easy CLI time tracker for your tasks"
 	app.Version = "0.1"
 	app.Commands = commands
-
 	app.Run(os.Args)
 }
