@@ -4,16 +4,16 @@ import "testing"
 
 func TestAddItem(t *testing.T) {
 	tasks := Tasks{}
-	tasks.addItem(Task{"identifier-1", "start", "timestamp"})
-	tasks.addItem(Task{"identifier-2", "start", "timestamp"})
+	tasks.addItem(Task{"identifier-1", "start", "2016-01-02T15:04:00Z"})
+	tasks.addItem(Task{"identifier-2", "start", "2016-01-02T15:04:00Z"})
 	if !(len(tasks.Items) == 2) {
 		t.Errorf("Expected 2 tasks, only %d.", len(tasks.Items))
 	}
 }
 
 func TestItemToArrayString(t *testing.T) {
-	task := Task{"identifier-1", "start", "timestamp"}
-	expectedArrayString := []string{"identifier-1", "start", "timestamp"}
+	task := Task{"identifier-1", "start", "2016-01-02T15:04:00Z"}
+	expectedArrayString := []string{"identifier-1", "start", "2016-01-02T15:04:00Z"}
 	toArrayString := task.toArrayString()
 	if toArrayString[0] != expectedArrayString[0] {
 		t.Errorf("Expected identifier %s, given %s.", expectedArrayString[0], toArrayString[0])
@@ -29,9 +29,9 @@ func TestItemToArrayString(t *testing.T) {
 func TestGetByIdentifier(t *testing.T) {
 	tasks := Tasks{
 		Items: []Task{
-			{"identifier-1", "start", "timestamp"},
-			{"identifier-2", "start", "timestamp 2"},
-			{"identifier-2", "stop", "timestamp 2"},
+			{"identifier-1", "start", "2016-01-02T15:04:00Z"},
+			{"identifier-2", "start", "2016-01-02T15:04:00Z"},
+			{"identifier-2", "stop", "2016-01-02T15:04:00Z"},
 		},
 	}
 
@@ -42,22 +42,22 @@ func TestGetByIdentifier(t *testing.T) {
 }
 
 func TestGetIdentifier(t *testing.T) {
-	task := Task{"identifier-1", "start", "timestamp"}
+	task := Task{"identifier-1", "start", "2016-01-02T15:04:00Z"}
 	if task.getIdentifier() != "identifier-1" {
 		t.Errorf("Expected identifier-1, got %s.", task.getIdentifier())
 	}
 }
 
 func TestGetAction(t *testing.T) {
-	task := Task{"identifier-1", "start", "timestamp"}
+	task := Task{"identifier-1", "start", "2016-01-02T15:04:00Z"}
 	if task.getAction() != "start" {
 		t.Errorf("Expected start, got %s.", task.getAction())
 	}
 }
 
 func TestGetAt(t *testing.T) {
-	task := Task{"identifier-1", "start", "timestamp"}
-	if task.getAt() != "timestamp" {
-		t.Errorf("Expected timestamp, got %s.", task.getAt())
+	task := Task{"identifier-1", "start", "2016-01-02T15:04:00Z"}
+	if task.getAt() != "2016-01-02T15:04:00Z" {
+		t.Errorf("Expected 2016-01-02T15:04:00Z, got %s.", task.getAt())
 	}
 }
