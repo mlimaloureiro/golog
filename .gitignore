@@ -3,6 +3,9 @@
 *.a
 *.so
 
+# Storage files
+*.csv
+
 # Folders
 _obj
 _test

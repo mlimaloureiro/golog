@@ -1,4 +1,4 @@
-package golog
+package main
 
 // Tasks Struct with tasks items
 type Tasks struct {

@@ -9,9 +9,9 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-const alphanumericRegex = "^[a-zA-Z0-9_]*$"
+const alphanumericRegex = "^[a-zA-Z0-9_-]*$"
 
-var repository = TaskCsvRepository{Path: "db.csv"}
+var repository = TaskCsvRepository{Path: "./db.csv"}
 var commands = []cli.Command{
 	{
 		Name:   "start",
