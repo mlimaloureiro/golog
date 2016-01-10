@@ -27,7 +27,7 @@ func (transformer *Transformer) Transform() map[string]string {
 		}
 		taskSeconds := transformer.TrackingToSeconds(task.getIdentifier())
 		humanTime := transformer.SecondsToHuman(taskSeconds)
-		transformedTask := fmt.Sprintf("%s                               %s", task.getIdentifier(), humanTime)
+		transformedTask := fmt.Sprintf("%s  %s", humanTime, task.getIdentifier())
 		transformedTasks[task.getIdentifier()] = transformedTask
 	}
 
