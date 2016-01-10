@@ -17,9 +17,9 @@ var commands = []cli.Command{
 		Action: Start,
 	},
 	{
-		Name:   "pause",
-		Usage:  "Pause tracking a given task",
-		Action: Pause,
+		Name:   "stop",
+		Usage:  "Stop tracking a given task",
+		Action: Stop,
 	},
 	{
 		Name:   "status",
@@ -30,11 +30,6 @@ var commands = []cli.Command{
 		Name:   "list",
 		Usage:  "List all tasks",
 		Action: List,
-	},
-	{
-		Name:   "delete",
-		Usage:  "Delete a task",
-		Action: Delete,
 	},
 }
 
@@ -47,19 +42,11 @@ func Start(context *cli.Context) {
 }
 
 // Pause a given task
-func Pause(context *cli.Context) {
+func Stop(context *cli.Context) {
 	if !IsValidIdentifier(context.Args().First()) {
 		cli.ShowCommandHelp(context, context.Command.FullName())
 	}
 	fmt.Println("pause", context.Args().First())
-}
-
-// Continue continue to track paused task
-func Continue(context *cli.Context) {
-	if !IsValidIdentifier(context.Args().First()) {
-		cli.ShowCommandHelp(context, context.Command.FullName())
-	}
-	fmt.Println("continuing", context.Args().First())
 }
 
 // Status display tasks being tracked
@@ -70,11 +57,6 @@ func Status(context *cli.Context) {
 // List lists all tasks
 func List(context *cli.Context) {
 	fmt.Print("list")
-}
-
-// Delete a task
-func Delete(context *cli.Context) {
-	fmt.Print("delete")
 }
 
 // IsValidIdentifier checks if the string passed is a valid task identifier
