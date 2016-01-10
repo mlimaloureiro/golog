@@ -12,6 +12,7 @@ import (
 const alphanumericRegex = "^[a-zA-Z0-9_-]*$"
 
 var repository = TaskCsvRepository{Path: "./db.csv"}
+var transformer = Transformer{}
 var commands = []cli.Command{
 	{
 		Name:   "start",
@@ -49,20 +50,33 @@ func Start(context *cli.Context) {
 
 // Stop a given task
 func Stop(context *cli.Context) {
-	if !IsValidIdentifier(context.Args().First()) {
+	identifier := context.Args().First()
+	if !IsValidIdentifier(identifier) {
 		cli.ShowCommandHelp(context, context.Command.FullName())
 	}
-	fmt.Println("pause", context.Args().First())
+
+	repository.save(Task{Identifier: identifier, Action: "stop", At: time.Now().Format(time.RFC3339)})
+
+	fmt.Println("Stopped tracking ", identifier)
 }
 
 // Status display tasks being tracked
 func Status(context *cli.Context) {
-	fmt.Print("status")
+	identifier := context.Args().First()
+	if !IsValidIdentifier(identifier) {
+		cli.ShowCommandHelp(context, context.Command.FullName())
+	}
+
+	transformer.LoadedTasks = repository.load().getByIdentifier(identifier)
+	fmt.Println(transformer.Transform()[identifier])
 }
 
 // List lists all tasks
 func List(context *cli.Context) {
-	fmt.Print("list")
+	transformer.LoadedTasks = repository.load()
+	for _, task := range transformer.Transform() {
+		fmt.Println(task)
+	}
 }
 
 // IsValidIdentifier checks if the string passed is a valid task identifier
