@@ -7,11 +7,14 @@ import (
 	"time"
 
 	"github.com/codegangsta/cli"
+	"github.com/mitchellh/go-homedir"
 )
 
 const alphanumericRegex = "^[a-zA-Z0-9_-]*$"
+const dbFile = "~/.golog"
 
-var repository = TaskCsvRepository{Path: "./db.csv"}
+var dbPath, _ = homedir.Expand(dbFile)
+var repository = TaskCsvRepository{Path: dbPath}
 var transformer = Transformer{}
 var commands = []cli.Command{
 	{
@@ -85,7 +88,15 @@ func IsValidIdentifier(identifier string) bool {
 	return len(identifier) > 0 && re.MatchString(identifier)
 }
 
+func checkInitialDbFile() {
+	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
+		os.Create(dbPath)
+	}
+}
+
 func main() {
+	// @todo remove this from here, should be in file repo implementation
+	checkInitialDbFile()
 	app := cli.NewApp()
 	app.Name = "Golog"
 	app.Usage = "Easy CLI time tracker for your tasks"
