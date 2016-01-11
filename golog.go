@@ -18,19 +18,22 @@ var repository = TaskCsvRepository{Path: dbPath}
 var transformer = Transformer{}
 var commands = []cli.Command{
 	{
-		Name:   "start",
-		Usage:  "Start tracking a given task",
-		Action: Start,
+		Name:         "start",
+		Usage:        "Start tracking a given task",
+		Action:       Start,
+		BashComplete: AutocompleteTasks,
 	},
 	{
-		Name:   "stop",
-		Usage:  "Stop tracking a given task",
-		Action: Stop,
+		Name:         "stop",
+		Usage:        "Stop tracking a given task",
+		Action:       Stop,
+		BashComplete: AutocompleteTasks,
 	},
 	{
-		Name:   "status",
-		Usage:  "Give status of all tasks",
-		Action: Status,
+		Name:         "status",
+		Usage:        "Give status of all tasks",
+		Action:       Status,
+		BashComplete: AutocompleteTasks,
 	},
 	{
 		Name:   "list",
@@ -82,6 +85,18 @@ func List(context *cli.Context) {
 	}
 }
 
+// AutocompleteTasks loads tasks from repository and show them for completion
+func AutocompleteTasks(context *cli.Context) {
+	// This will complete if no args are passed
+	if len(context.Args()) > 0 {
+		return
+	}
+	transformer.LoadedTasks = repository.load()
+	for _, task := range transformer.LoadedTasks.Items {
+		fmt.Println(task.getIdentifier())
+	}
+}
+
 // IsValidIdentifier checks if the string passed is a valid task identifier
 func IsValidIdentifier(identifier string) bool {
 	re := regexp.MustCompile(alphanumericRegex)
@@ -101,6 +116,7 @@ func main() {
 	app.Name = "Golog"
 	app.Usage = "Easy CLI time tracker for your tasks"
 	app.Version = "0.1"
+	app.EnableBashCompletion = true
 	app.Commands = commands
 	app.Run(os.Args)
 }
