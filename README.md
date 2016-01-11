@@ -51,7 +51,7 @@ $ golog status create-readme
 0h:3m:55s    create-readme (running)
 ```
 
-*Contribution Guidelines*
+# Contribution Guidelines
 @TODO
 If you have any questions feel free to link @mlimaloureiro to the issue in question and we can review it together.
 
