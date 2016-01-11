@@ -30,7 +30,7 @@ The **start** command will start tracking time for a given taskname. **Note that
 $ golog start {taskname}
 ```
 
-To stop tracking use the **stop** command, if you want to **resume the tracking** a stopped task just golog start {taskname} again.
+To stop tracking use the **stop** command, if you want to **resume** a stopped task just golog start {taskname} again.
 
 ```
 $ golog stop {taskname}
