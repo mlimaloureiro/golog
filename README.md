@@ -3,7 +3,7 @@
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 # Golog
-`Golog` is an easy and lightweight CLI tool to time track your tasks. The goal is to enable to track concurrent and small to big tasks.
+`Golog` is an easy and lightweight CLI tool to time track your tasks. The goal is to enable to track concurrent from small to big tasks.
 
 # Overview
 I work in a very fast paced company, and I'm always receiving requests, plus *a lot* of small requests and I struggled to find a tool that fit my needs. We do use other tools to track the time spent on a task, but sometimes it gets so overwhelming that it's just not worth to create a bunch of small tasks and track them **but you do want to track them**. If you have your terminal always open like me `Golog` is perfect for this environments, you can log multiple tasks at the same time without going to your browser/proj management tool to improve productiveness.
