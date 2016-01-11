@@ -22,6 +22,28 @@ To install it in your path so that `golog`can be easily used:
 $ GOBIN="/usr/local/bin" go install
 ```
 
+#### Enabling autocomplete
+
+Copy `autocomplete/bash_autocomplete` into `/etc/bash_completion.d/golog`.
+Don't forget to source the file to make it active in the current shell.
+
+```
+   sudo cp autocomplete/bash_autocomplete /etc/bash_completion.d/golog
+   source /etc/bash_completion.d/golog
+```
+
+Alternatively, you can just source `autocomplete/bash_autocomplete` in your bash configuration with `$PROG` set to golog.
+
+```
+PROG=golog source "$GOPATH/src/github.com/mlimaloureiro/autocomplete/bash_autocomplete"
+```
+
+If using `zsh` use `zsh_autocomplete`
+
+```
+PROG=golog source "$GOPATH/src/github.com/mlimaloureiro/autocomplete/zsh_autocomplete"
+```
+
 ## Getting Started
 
 The **start** command will start tracking time for a given taskname. **Note that a taskname cannot have white spaces**, they serve as identifiers.
