@@ -10,7 +10,7 @@
 # Overview
 I work in a very fast paced company, and I'm always receiving requests, plus *a lot* of small requests and I've struggled to find a tool that fit my needs. We do use other tools to track the time spent on a task, but sometimes it gets so overwhelming that it's just not worth to create a bunch of small tasks and track them **but you do want to track them**. If you have your terminal always opened like me, `golog` is perfect for this environments, you can log multiple tasks at the same time without going to your browser/proj management tool to improve productiveness.
 
-# Instalation
+# Installation
 Make sure you have a working Go environment (go 1.1+ is *required*). [See the install instructions](http://golang.org/doc/install.html).
 
 To get `golog`, run:
