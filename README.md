@@ -37,13 +37,13 @@ Don't forget to source the file to make it active in the current shell.
 Alternatively, you can just source `autocomplete/bash_autocomplete` in your bash configuration with `$PROG` set to golog.
 
 ```
-PROG=golog source "$GOPATH/src/github.com/mlimaloureiro/autocomplete/bash_autocomplete"
+PROG=golog source "$GOPATH/src/github.com/mlimaloureiro/golog/autocomplete/bash_autocomplete"
 ```
 
 If using `zsh` use `zsh_autocomplete`
 
 ```
-PROG=golog source "$GOPATH/src/github.com/mlimaloureiro/autocomplete/zsh_autocomplete"
+PROG=golog source "$GOPATH/src/github.com/mlimaloureiro/golog/autocomplete/zsh_autocomplete"
 ```
 
 ## Getting Started
