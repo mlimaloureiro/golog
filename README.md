@@ -21,6 +21,7 @@ $ go get github.com/mlimaloureiro/golog
 To install it in your path so that `golog`can be easily used:
 
 ```
+cd $GOPATH/src/github.com/mlimaloureiro/golog
 $ GOBIN="/usr/local/bin" go install
 ```
 
