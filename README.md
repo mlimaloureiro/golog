@@ -76,8 +76,13 @@ $ golog status create-readme
 0h:3m:55s    create-readme (running)
 ```
 
+The lifetime of the info I usually need is very short (actually is just a workday), in the next day it's unlikely that i'll need previous info. This is one case where **clear** command is handy.
+
+```
+$ golog clear
+All tasks were deleted.
+```
+
 # Contribution Guidelines
 @TODO
 If you have any questions feel free to link @mlimaloureiro to the issue in question and we can review it together.
-
-

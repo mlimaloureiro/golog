@@ -36,6 +36,11 @@ var commands = []cli.Command{
 		BashComplete: AutocompleteTasks,
 	},
 	{
+		Name:   "clear",
+		Usage:  "Clear all data",
+		Action: Clear,
+	},
+	{
 		Name:   "list",
 		Usage:  "List all tasks",
 		Action: List,
@@ -83,6 +88,12 @@ func List(context *cli.Context) {
 	for _, task := range transformer.Transform() {
 		fmt.Println(task)
 	}
+}
+
+// Clear all data
+func Clear(context *cli.Context) {
+	repository.clear()
+	fmt.Println("All tasks were deleted.")
 }
 
 // AutocompleteTasks loads tasks from repository and show them for completion
