@@ -48,61 +48,84 @@ var commands = []cli.Command{
 }
 
 // Start a given task
-func Start(context *cli.Context) {
+func Start(context *cli.Context) error {
 	identifier := context.Args().First()
 	if !IsValidIdentifier(identifier) {
-		cli.ShowCommandHelp(context, context.Command.FullName())
+		return invalidIdentifier(identifier)
 	}
 
-	repository.save(Task{Identifier: identifier, Action: "start", At: time.Now().Format(time.RFC3339)})
+	err := repository.save(Task{Identifier: identifier, Action: "start", At: time.Now().Format(time.RFC3339)})
 
-	fmt.Println("Started tracking ", identifier)
+	if err == nil {
+		fmt.Println("Started tracking ", identifier)
+	}
+	return err
 }
 
 // Stop a given task
-func Stop(context *cli.Context) {
+func Stop(context *cli.Context) error {
 	identifier := context.Args().First()
 	if !IsValidIdentifier(identifier) {
-		cli.ShowCommandHelp(context, context.Command.FullName())
+		return invalidIdentifier(identifier)
 	}
 
-	repository.save(Task{Identifier: identifier, Action: "stop", At: time.Now().Format(time.RFC3339)})
+	err := repository.save(Task{Identifier: identifier, Action: "stop", At: time.Now().Format(time.RFC3339)})
 
-	fmt.Println("Stopped tracking ", identifier)
+	if err == nil {
+		fmt.Println("Stopped tracking ", identifier)
+	}
+	return err
 }
 
 // Status display tasks being tracked
-func Status(context *cli.Context) {
+func Status(context *cli.Context) error {
 	identifier := context.Args().First()
 	if !IsValidIdentifier(identifier) {
-		cli.ShowCommandHelp(context, context.Command.FullName())
+		return invalidIdentifier(identifier)
 	}
 
-	transformer.LoadedTasks = repository.load().getByIdentifier(identifier)
+	tasks, err := repository.load()
+	if err != nil {
+		return err
+	}
+	transformer.LoadedTasks = tasks.getByIdentifier(identifier)
 	fmt.Println(transformer.Transform()[identifier])
+	return nil
 }
 
 // List lists all tasks
-func List(context *cli.Context) {
-	transformer.LoadedTasks = repository.load()
+func List(context *cli.Context) error {
+	var err error
+	transformer.LoadedTasks, err = repository.load()
+	if err != nil {
+		return err
+	}
+
 	for _, task := range transformer.Transform() {
 		fmt.Println(task)
 	}
+	return nil
 }
 
 // Clear all data
-func Clear(context *cli.Context) {
-	repository.clear()
-	fmt.Println("All tasks were deleted.")
+func Clear(context *cli.Context) error {
+	err := repository.clear()
+	if err == nil {
+		fmt.Println("All tasks deleted")
+	}
+	return err
 }
 
 // AutocompleteTasks loads tasks from repository and show them for completion
 func AutocompleteTasks(context *cli.Context) {
+	var err error
+	transformer.LoadedTasks, err = repository.load()
 	// This will complete if no args are passed
-	if len(context.Args()) > 0 {
+	//   or there is problem with tasks repo
+	if len(context.Args()) > 0 || err != nil {
 		return
 	}
-	transformer.LoadedTasks = repository.load()
+
 	for _, task := range transformer.LoadedTasks.Items {
 		fmt.Println(task.getIdentifier())
 	}
@@ -129,5 +152,13 @@ func main() {
 	app.Version = "0.1"
 	app.EnableBashCompletion = true
 	app.Commands = commands
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+func invalidIdentifier(identifier string) error {
+	return fmt.Errorf("identifier %q is invalid", identifier)
 }

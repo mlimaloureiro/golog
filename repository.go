@@ -10,8 +10,9 @@ import (
 // operations. Example implementations of an RepositoryProvider might be a simple
 // csv file, sql, mongo...
 type RepositoryInterface interface {
-	save(task Task) bool
-	load() Tasks
+	save(task Task) error
+	load() (Tasks, error)
+	clear() error
 }
 
 // TaskCsvRepository is a type with the path of the file to be readed
@@ -21,11 +22,11 @@ type TaskCsvRepository struct {
 
 // FileRepository implementation of RepositoryInterface for simple .csv files
 // each line: identifier,action,at
-func (csvRepository TaskCsvRepository) load() Tasks {
+func (csvRepository TaskCsvRepository) load() (Tasks, error) {
+	tasks := Tasks{}
 	csvFile, err := os.Open(csvRepository.Path)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return tasks, err
 	}
 	defer csvFile.Close()
 
@@ -34,40 +35,38 @@ func (csvRepository TaskCsvRepository) load() Tasks {
 
 	rawCsvData, err := reader.ReadAll()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return tasks, err
 	}
 
-	tasks := Tasks{}
 	for _, line := range rawCsvData {
+		if len(line) != 3 {
+			if err != nil {
+				return tasks, fmt.Errorf("csvfile: malformed line: %q", line)
+			}
+		}
 		tasks.addItem(Task{Identifier: line[0], Action: line[1], At: line[2]})
 	}
 
-	return tasks
+	return tasks, nil
 }
 
-func (csvRepository TaskCsvRepository) save(task Task) bool {
+func (csvRepository TaskCsvRepository) save(task Task) error {
 	csvFile, err := os.OpenFile(csvRepository.Path, os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
 	defer csvFile.Close()
 
 	writer := csv.NewWriter(csvFile)
-	writer.Write(task.toArrayString())
+	err = writer.Write(task.toArrayString())
 	writer.Flush()
-
-	return true
+	return err
 }
 
-func (csvRepository TaskCsvRepository) clear() bool {
+func (csvRepository TaskCsvRepository) clear() error {
 	csvFile, err := os.OpenFile(csvRepository.Path, os.O_TRUNC|os.O_WRONLY, 0600)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+	if err == nil {
+		csvFile.Close()
 	}
-	defer csvFile.Close()
-
-	return true
+	return err
 }
