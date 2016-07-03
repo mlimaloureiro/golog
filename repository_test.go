@@ -4,7 +4,7 @@ import "testing"
 
 func TestCsvRepositoryLoad(t *testing.T) {
 	taskCsvRepository := TaskCsvRepository{Path: "fixtures/test_load.csv"}
-	tasks := taskCsvRepository.load()
+	tasks, _ := taskCsvRepository.load()
 	if !(len(tasks.Items) == 2) {
 		t.Error("Expected to have 2 items in csv file.")
 	}
@@ -20,14 +20,14 @@ func TestCsvRepositoryLoad(t *testing.T) {
 
 func TestCsvRepositorySave(t *testing.T) {
 	taskCsvRepository := TaskCsvRepository{Path: "fixtures/test_save.csv"}
-	tasks := taskCsvRepository.load()
-	if !(len(tasks.Items) == 0) {
+	tasks, err := taskCsvRepository.load()
+	if !(len(tasks.Items) == 0) || err != nil {
 		t.Error("Expected to have 0 items in csv file.")
 	}
 
 	taskCsvRepository.save(Task{Identifier: "identifier-1", Action: "start", At: "2016-01-02T15:04:00Z"})
 	taskCsvRepository.save(Task{Identifier: "identifier-2", Action: "start", At: "2016-01-02T15:04:00Z"})
-	tasks = taskCsvRepository.load()
+	tasks, _ = taskCsvRepository.load()
 	if !(len(tasks.Items) == 2) {
 		t.Error("Expected to have 2 items in csv file.")
 	}
